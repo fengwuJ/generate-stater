@@ -2,14 +2,14 @@ package ${Configuration.packageName}.${Configuration.path.service};
 
 import ${Configuration.packageName}.${Configuration.path.dao}.${DaoClassName};
 import ${Configuration.packageName}.${Configuration.path.entity}.${ClassName};
+import ${Configuration.packageName}.${Configuration.path.req}.${ReqClassName};
+import ${Configuration.packageName}.${Configuration.path.res}.${ResClassName};
+import ${Configuration.packageName}.${Configuration.path.search}.${SearchClassName};
 ${InterfaceImport}
-<#if Configuration.mybatisPlusEnable>
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-<#else>
 import java.io.Serializable;
-</#if>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,64 +19,42 @@ import java.util.List;
  * @date ${.now?date}
  */
 @Service
-<#if Configuration.mybatisPlusEnable><#-- mybatis-plus模式 -->
-public class ${ServiceClassName} extends ServiceImpl<${DaoClassName}, ${ClassName}> ${Implements} {
-
-}
-<#else><#-- mybatis或jpa模式 -->
 public class ${ServiceClassName} ${Implements} {
     @Autowired
     private ${DaoClassName} ${DaoEntityName};
-    <#if Configuration.jpaEnable><#-- jpa模式 -->
+
     ${Override}
-    public ${ClassName} get(Serializable id) {
-        return ${DaoEntityName}.findById(id).orElse(null);
+    public Object page(${SearchClassName} search){
+
+        return null;
     }
+
     ${Override}
-    public List<${ClassName}> findAll() {
-        return ${DaoEntityName}.findAll();
+    public List<${ResClassName}> findAll(){
+
+        return null;
     }
+
     ${Override}
-    public ${ClassName} insert(${ClassName} ${EntityName}) {
-        return ${DaoEntityName}.save(${EntityName});
+    public ${ResClassName} findById(${pkType} id){
+
+
+        return null;
     }
+
     ${Override}
-    public List<${ClassName}> insertBatch(List<${ClassName}> ${EntityName}s){
-        return ${DaoEntityName}.saveAll(${EntityName}s);
+    public void save(${ReqClassName} ${ReqEntityName}){
+
     }
+
     ${Override}
-    public ${ClassName} update(${ClassName} ${EntityName}) {
-        return ${DaoEntityName}.save(${EntityName});
+    public void update(${ReqClassName} ${ReqEntityName}){
+
     }
+
     ${Override}
-    public void delete(${ClassName} ${EntityName}) {
-        ${DaoEntityName}.delete(${EntityName});
+    public void deleteByIds(List<${pkType}> ids){
+
     }
-    <#else><#-- mybatis模式 -->
-    ${Override}
-    public ${ClassName} get(Serializable id) {
-        return ${DaoEntityName}.get(id);
-    }
-    ${Override}
-    public List<${ClassName}> findAll() {
-        return ${DaoEntityName}.findAll();
-    }
-    ${Override}
-    public int insert(${ClassName} ${EntityName}) {
-        return ${DaoEntityName}.insert(${EntityName});
-    }
-    ${Override}
-    public int insertBatch(List<${ClassName}> ${EntityName}s) {
-        return ${DaoEntityName}.insertBatch(${EntityName}s);
-    }
-    ${Override}
-    public int update(${ClassName} ${EntityName}) {
-        return ${DaoEntityName}.update(${EntityName});
-    }
-    ${Override}
-    public int delete(${ClassName} ${EntityName}) {
-        return ${DaoEntityName}.delete(${EntityName});
-    }
-    </#if>
+
 }
-</#if>

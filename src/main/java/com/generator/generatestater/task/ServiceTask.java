@@ -1,5 +1,6 @@
 package com.generator.generatestater.task;
 
+import com.generator.generatestater.entity.ColumnInfo;
 import com.generator.generatestater.entity.Constant;
 import com.generator.generatestater.invoker.base.AbstractInvoker;
 import com.generator.generatestater.task.base.AbstractTask;
@@ -8,6 +9,7 @@ import freemarker.template.TemplateException;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ServiceTask extends AbstractTask {
@@ -27,6 +29,17 @@ public class ServiceTask extends AbstractTask {
         serviceData.put("DaoClassName", ConfigUtil.getConfiguration().getName().getDao().replace(Constant.PLACEHOLDER, invoker.getClassName()));
         serviceData.put("DaoEntityName", StringUtil.firstToLowerCase(ConfigUtil.getConfiguration().getName().getDao()
                 .replace(Constant.PLACEHOLDER, invoker.getClassName())));
+        serviceData.put("ReqEntityName", StringUtil.firstToLowerCase(ConfigUtil.getConfiguration().getName().getEntity()
+                .replace(Constant.PLACEHOLDER, invoker.getClassName()))+"Req");
+        serviceData.put("ResEntityName", StringUtil.firstToLowerCase(ConfigUtil.getConfiguration().getName().getEntity()
+                .replace(Constant.PLACEHOLDER, invoker.getClassName()+"Res")));
+        serviceData.put("SearchClassName", ConfigUtil.getConfiguration().getName().getEntity()
+                .replace(Constant.PLACEHOLDER, invoker.getClassName()+"Search"));
+        serviceData.put("pkType", getPrimaryKeyType(invoker.getTableInfos()));
+        serviceData.put("ReqClassName", ConfigUtil.getConfiguration().getName().getEntity()
+                .replace(Constant.PLACEHOLDER, invoker.getClassName()+"Req"));
+        serviceData.put("ResClassName", ConfigUtil.getConfiguration().getName().getEntity()
+                .replace(Constant.PLACEHOLDER, invoker.getClassName()+"Res"));
         String filePath = FileUtil.getSourcePath() + StringUtil.package2Path(ConfigUtil.getConfiguration().getPackageName())
                 + StringUtil.package2Path(ConfigUtil.getConfiguration().getPath().getService());
         String fileName;
@@ -54,5 +67,23 @@ public class ServiceTask extends AbstractTask {
         }
         // 生成Service文件
         FileUtil.generateToJava(FreemarkerConfigUtil.TYPE_SERVICE, serviceData, filePath, fileName);
+    }
+
+    /**
+     * 获取主键列对应的属性类型
+     *
+     * @param columnInfos
+     * @return
+     */
+    private String getPrimaryKeyType(List<ColumnInfo> columnInfos) {
+        if (!ConfigUtil.getConfiguration().isJpaEnable()) {
+            return "Serializable";
+        }
+        for (ColumnInfo info : columnInfos) {
+            if (info.isPrimaryKey()) {
+                return info.getPropertyType();
+            }
+        }
+        return "Serializable";
     }
 }

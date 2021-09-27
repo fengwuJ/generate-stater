@@ -61,7 +61,17 @@ public class Configuration implements Serializable {
 
     private TkMapper tkMapper;
 
+    private boolean tkMapperEnable;
+
     private boolean generateEmptyMapper;
+
+    public void setTkMapperEnable(boolean tkMapperEnable) {
+        this.tkMapperEnable = tkMapperEnable;
+    }
+
+    public boolean isTkMapperEnable() {
+        return tkMapperEnable;
+    }
 
     public boolean isGenerateEmptyMapper() {
         return generateEmptyMapper;
@@ -249,15 +259,13 @@ public class Configuration implements Serializable {
     }
 
     public static class TkMapper{
-        private boolean tkMapperEnable;
 
         private String baseMapper;
 
         public TkMapper() {
         }
 
-        public TkMapper(boolean tkMapperEnable, String baseMapper) {
-            this.tkMapperEnable = tkMapperEnable;
+        public TkMapper(String baseMapper) {
             this.baseMapper = baseMapper;
         }
 
@@ -265,17 +273,10 @@ public class Configuration implements Serializable {
             return baseMapper;
         }
 
-        public boolean isTkMapperEnable() {
-            return tkMapperEnable;
-        }
-
         public void setBaseMapper(String baseMapper) {
             this.baseMapper = baseMapper;
         }
 
-        public void setTkMapperEnable(boolean tkMapperEnable) {
-            tkMapperEnable = tkMapperEnable;
-        }
     }
 
     /**

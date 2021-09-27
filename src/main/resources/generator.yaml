@@ -8,8 +8,8 @@ packageName: com.generator.generatestater.test
 convertor: com.generator.generatestater.convertor.CustomConvertor
 generateEmptyMapper: true
 tkMapper:
-  tkMapperEnable: true
   baseMapper: com.generator.generatestater.common.CustomizeBaseMapper
+tkMapperEnable: true
 mybatisPlusEnable: false # 启用mybatis-plus
 jpaEnable: false         # 启用jpa
 swaggerEnable: false      # 启用swagger

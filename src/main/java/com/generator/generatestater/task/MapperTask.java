@@ -1,6 +1,7 @@
 package com.generator.generatestater.task;
 
 import com.generator.generatestater.entity.ColumnInfo;
+import com.generator.generatestater.entity.Configuration;
 import com.generator.generatestater.entity.Constant;
 import com.generator.generatestater.invoker.base.AbstractInvoker;
 import com.generator.generatestater.task.base.AbstractTask;
@@ -23,6 +24,7 @@ public class MapperTask extends AbstractTask {
         // 构造Mapper填充数据
         int generateXmlType = FreemarkerConfigUtil.TYPE_EMPTYMAPPER;
         Map<String, Object> mapperData = new HashMap<>();
+        Configuration configuration = ConfigUtil.getConfiguration();
         mapperData.put("Configuration", ConfigUtil.getConfiguration());
         mapperData.put("ClassName", ConfigUtil.getConfiguration().getName().getEntity()
                 .replace(Constant.PLACEHOLDER, invoker.getClassName()));

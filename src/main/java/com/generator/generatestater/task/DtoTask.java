@@ -170,7 +170,7 @@ public class DtoTask extends AbstractTask {
                 }
             }
             sb.append(Constant.SPACE_4).append(String.format("@Column(name = \"%s\")\n", info.getColumnName()));
-        }else if (ConfigUtil.getConfiguration().getTkMapper().isTkMapperEnable()){
+        }else if (ConfigUtil.getConfiguration().isTkMapperEnable()){
             if (info.isPrimaryKey()) {
                 if (ConfigUtil.getConfiguration().getIdStrategy() == null || ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.AUTO) {
                     sb.append(Constant.SPACE_4).append("@Id\n");
