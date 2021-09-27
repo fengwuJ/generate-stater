@@ -97,8 +97,6 @@ public class ConfigUtil {
             if (StringUtil.isEmpty(ConfigUtil.configuration.getPackageName())) {
                 throw new Exception("Please configure the correct attribute named 'package-name' or 'packageName'.");
             }
-            //TODO
-            //ConfigUtil.configuration.getPath().setMapper(null);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);

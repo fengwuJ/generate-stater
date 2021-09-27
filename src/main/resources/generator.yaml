@@ -14,7 +14,7 @@ swaggerEnable: false      # 启用swagger
 lombokEnable: true       # 启用lombok
 idStrategy: AUTO         # 主键生成策略  AUTO || UUID
 fileOverride: true       # 重名文件覆盖
-mapperUnderSource: false # MyBatis映射文件放于source目录下
+mapperUnderSource: false # false---(默认) MyBatis映射文件放于source目录下 || true--放置在rc源码中
 path:
   controller: controller
   service: service.impl
