@@ -76,9 +76,7 @@ public class ConfigUtil {
             // 用户未配置类名后缀，那么添加一个默认的空对象，这里是为了保证在用户不配置name属性时，程序能够取得默认值
             if (null == ConfigUtil.configuration.getName()) {
                 Configuration.Name nameConfig = new Configuration.Name();
-                if (ConfigUtil.configuration.isJpaEnable()) {
-                    nameConfig.setDao(Constant.PLACEHOLDER + "Repository");
-                } else if (ConfigUtil.configuration.isMybatisPlusEnable()) {
+                if (ConfigUtil.configuration.isTkMapperEnable()) {
                     nameConfig.setDao(Constant.PLACEHOLDER + "Mapper");
                 }
                 ConfigUtil.configuration.setName(nameConfig);
@@ -99,13 +97,8 @@ public class ConfigUtil {
             if (StringUtil.isEmpty(ConfigUtil.configuration.getPackageName())) {
                 throw new Exception("Please configure the correct attribute named 'package-name' or 'packageName'.");
             }
-            // 检查是否同时启用了jpa和mybatis-plus模式
-            if (ConfigUtil.configuration.isMybatisPlusEnable() && ConfigUtil.configuration.isJpaEnable()) {
-                throw new Exception("Can not enable JPA mode and MyBatis-Plus mode at the same time.");
-            } else if (ConfigUtil.configuration.isMybatisPlusEnable() || ConfigUtil.configuration.isJpaEnable()) {
-                // 禁止生成mapper.xml
-                ConfigUtil.configuration.getPath().setMapper(null);
-            }
+            //TODO
+            //ConfigUtil.configuration.getPath().setMapper(null);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);

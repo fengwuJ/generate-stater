@@ -21,33 +21,9 @@ public abstract class AbstractInvoker implements Invoker {
      */
     protected String className;
     /**
-     * 父表名
-     */
-    protected String parentTableName;
-    /**
-     * 父类名
-     */
-    protected String parentClassName;
-    /**
-     * 外键列名
-     */
-    protected String foreignKey;
-    /**
-     * 关系表名
-     */
-    protected String relationalTableName;
-    /**
-     * 父表外键列名
-     */
-    protected String parentForeignKey;
-    /**
      * 主表元数据
      */
     protected List<ColumnInfo> tableInfos;
-    /**
-     * 父表元数据
-     */
-    protected List<ColumnInfo> parentTableInfos;
     /**
      * 数据库连接工具
      */
@@ -107,26 +83,6 @@ public abstract class AbstractInvoker implements Invoker {
         this.className = className;
     }
 
-    public void setParentTableName(String parentTableName) {
-        this.parentTableName = parentTableName;
-    }
-
-    public void setParentClassName(String parentClassName) {
-        this.parentClassName = parentClassName;
-    }
-
-    public void setForeignKey(String foreignKey) {
-        this.foreignKey = foreignKey;
-    }
-
-    public void setRelationalTableName(String relationalTableName) {
-        this.relationalTableName = relationalTableName;
-    }
-
-    public void setParentForeignKey(String parentForeignKey) {
-        this.parentForeignKey = parentForeignKey;
-    }
-
     public String getTableName() {
         return tableName;
     }
@@ -135,39 +91,11 @@ public abstract class AbstractInvoker implements Invoker {
         return className;
     }
 
-    public String getParentTableName() {
-        return parentTableName;
-    }
-
-    public String getParentClassName() {
-        return parentClassName;
-    }
-
-    public String getForeignKey() {
-        return foreignKey;
-    }
-
-    public String getRelationalTableName() {
-        return relationalTableName;
-    }
-
-    public String getParentForeignKey() {
-        return parentForeignKey;
-    }
-
     public List<ColumnInfo> getTableInfos() {
         return tableInfos;
     }
 
     public void setTableInfos(List<ColumnInfo> tableInfos) {
         this.tableInfos = tableInfos;
-    }
-
-    public List<ColumnInfo> getParentTableInfos() {
-        return parentTableInfos;
-    }
-
-    public void setParentTableInfos(List<ColumnInfo> parentTableInfos) {
-        this.parentTableInfos = parentTableInfos;
     }
 }

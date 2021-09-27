@@ -2,7 +2,6 @@ package com.generator.generatestater.task;
 
 import com.generator.generatestater.entity.ColumnInfo;
 import com.generator.generatestater.entity.Constant;
-import com.generator.generatestater.entity.IdStrategy;
 import com.generator.generatestater.invoker.base.AbstractInvoker;
 import com.generator.generatestater.task.base.AbstractTask;
 import com.generator.generatestater.utils.*;
@@ -70,12 +69,8 @@ public class DtoTask extends AbstractTask {
     public String entityProperties(AbstractInvoker invoker) {
         StringBuilder sb = new StringBuilder();
         tableInfos.forEach(ForEachUtil.withIndex((info, index) -> {
-            if (info.getColumnName().equals(invoker.getForeignKey())) {
-                return;
-            }
             sb.append(index == 0 ? "" : Constant.SPACE_4);
             generateRemarks(sb, info);
-            generateORMAnnotation(sb, info);
             sb.append(Constant.SPACE_4).append(String.format("private %s %s;\n", info.getPropertyType(), info.getPropertyName()));
             sb.append("\n");
         }));
@@ -94,9 +89,6 @@ public class DtoTask extends AbstractTask {
         }
         StringBuilder sb = new StringBuilder();
         tableInfos.forEach(ForEachUtil.withIndex((info, index) -> {
-            if (info.getColumnName().equals(invoker.getForeignKey())) {
-                return;
-            }
             String setter = String.format("public void set%s (%s %s) { this.%s = %s; } \n\n", StringUtil.firstToUpperCase(info.getPropertyName()),
                     info.getPropertyType(), info.getPropertyName(), info.getPropertyName(), info.getPropertyName());
             sb.append(index == 0 ? "" : Constant.SPACE_4).append(setter);
@@ -139,48 +131,6 @@ public class DtoTask extends AbstractTask {
         sb.append(String.format("@ApiModelProperty(value = \"%s\", dataType = \"%s\")",
                 info.getRemarks(), info.getPropertyType()));
         sb.append("\n");
-    }
-
-    /**
-     * 为实体属性生成Orm框架（jpa/mybatis-plus）注解
-     *
-     * @param sb   StringBuilder对象
-     * @param info 列属性
-     */
-    public void generateORMAnnotation(StringBuilder sb, ColumnInfo info) {
-        if (ConfigUtil.getConfiguration().isMybatisPlusEnable()) {
-            if (info.isPrimaryKey()) {
-                if (ConfigUtil.getConfiguration().getIdStrategy() == null || ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.AUTO) {
-                    sb.append(Constant.SPACE_4).append(String.format("@TableId(value = \"%s\", type = IdType.AUTO)\n", info.getColumnName()));
-                } else if (ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.UUID) {
-                    sb.append(Constant.SPACE_4).append(String.format("@TableId(value = \"%s\", type = IdType.ASSIGN_UUID)\n", info.getColumnName()));
-                }
-            } else {
-                sb.append(Constant.SPACE_4).append(String.format("@TableField(value = \"%s\")\n", info.getColumnName()));
-            }
-        } else if (ConfigUtil.getConfiguration().isJpaEnable()) {
-            if (info.isPrimaryKey()) {
-                if (ConfigUtil.getConfiguration().getIdStrategy() == null || ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.AUTO) {
-                    sb.append(Constant.SPACE_4).append("@Id\n");
-                    sb.append(Constant.SPACE_4).append("@GeneratedValue(strategy = GenerationType.IDENTITY)\n");
-                } else if (ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.UUID) {
-                    sb.append(Constant.SPACE_4).append("@Id\n");
-                    sb.append(Constant.SPACE_4).append("@GeneratedValue(generator = \"uuidGenerator\")\n");
-                    sb.append(Constant.SPACE_4).append("@GenericGenerator(name = \"uuidGenerator\", strategy = \"uuid\")\n");
-                }
-            }
-            sb.append(Constant.SPACE_4).append(String.format("@Column(name = \"%s\")\n", info.getColumnName()));
-        }else if (ConfigUtil.getConfiguration().isTkMapperEnable()){
-            if (info.isPrimaryKey()) {
-                if (ConfigUtil.getConfiguration().getIdStrategy() == null || ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.AUTO) {
-                    sb.append(Constant.SPACE_4).append("@Id\n");
-                } else if (ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.UUID) {
-                    sb.append(Constant.SPACE_4).append("@Id\n");
-                    sb.append(Constant.SPACE_4).append("@GeneratedValue(generator = \"uuidGenerator\")\n");
-                    sb.append(Constant.SPACE_4).append("@GenericGenerator(name = \"uuidGenerator\", strategy = \"uuid\")\n");
-                }
-            }
-        }
     }
 
 }

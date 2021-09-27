@@ -10,8 +10,6 @@ generateEmptyMapper: true
 tkMapper:
   baseMapper: com.generator.generatestater.common.CustomizeBaseMapper
 tkMapperEnable: true
-mybatisPlusEnable: false # 启用mybatis-plus
-jpaEnable: false         # 启用jpa
 swaggerEnable: false      # 启用swagger
 lombokEnable: true       # 启用lombok
 idStrategy: AUTO         # 主键生成策略  AUTO || UUID
@@ -20,7 +18,7 @@ mapperUnderSource: false # MyBatis映射文件放于source目录下
 path:
   controller: controller
   service: service.impl
-  interf: service # since v1.2.1
+  interf: service
   dao: mapper
   entity: entity
   mapper: mybatis

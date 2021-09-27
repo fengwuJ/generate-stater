@@ -29,8 +29,6 @@ public class EntityTask extends AbstractTask {
         this.invoker = invoker;
         if (Mode.ENTITY_MAIN.equals(mode)) {
             this.tableInfos = invoker.getTableInfos();
-        } else if (Mode.ENTITY_PARENT.equals(mode)) {
-            this.tableInfos = invoker.getParentTableInfos();
         }
     }
 
@@ -42,9 +40,6 @@ public class EntityTask extends AbstractTask {
         if (Mode.ENTITY_MAIN.equals(mode)) {
             className = ConfigUtil.getConfiguration().getName().getEntity().replace(Constant.PLACEHOLDER, invoker.getClassName());
             remarks = invoker.getTableInfos().get(0).getTableRemarks();
-        } else if (Mode.ENTITY_PARENT.equals(mode)) {
-            className = ConfigUtil.getConfiguration().getName().getEntity().replace(Constant.PLACEHOLDER, invoker.getParentClassName());
-            remarks = invoker.getParentTableInfos().get(0).getTableRemarks();
         }
         Map<String, Object> entityData = new HashMap<>();
         entityData.put("Configuration", ConfigUtil.getConfiguration());
@@ -69,30 +64,13 @@ public class EntityTask extends AbstractTask {
     public String entityProperties(AbstractInvoker invoker) {
         StringBuilder sb = new StringBuilder();
         tableInfos.forEach(ForEachUtil.withIndex((info, index) -> {
-            if (info.getColumnName().equals(invoker.getForeignKey())) {
-                return;
-            }
             sb.append(index == 0 ? "" : Constant.SPACE_4);
             generateRemarks(sb, info);
             generateORMAnnotation(sb, info);
+            sb.append(Constant.SPACE_4).append(String.format("@Column(name = \"%s\")\n", info.getColumnName()));
             sb.append(Constant.SPACE_4).append(String.format("private %s %s;\n", info.getPropertyType(), info.getPropertyName()));
             sb.append("\n");
         }));
-        // 生成父表实体类时，直接截断后续生成依赖关系的代码
-        if (Mode.ENTITY_PARENT.equals(mode)) {
-            return sb.toString();
-        }
-        if (!StringUtil.isEmpty(invoker.getRelationalTableName()) || !StringUtil.isEmpty(invoker.getParentForeignKey())) {
-            // 多对多 or 一对多
-            sb.append(Constant.SPACE_4).append(String.format("private List<%s> %ss;\n", invoker.getParentClassName(),
-                    StringUtil.firstToLowerCase(invoker.getParentClassName())));
-            sb.append("\n");
-        } else if (!StringUtil.isEmpty(invoker.getForeignKey())) {
-            // 多对一
-            sb.append(Constant.SPACE_4).append(String.format("private %s %s;\n", invoker.getParentClassName(),
-                    StringUtil.firstToLowerCase(invoker.getParentClassName())));
-            sb.append("\n");
-        }
         return sb.toString();
     }
 
@@ -108,9 +86,6 @@ public class EntityTask extends AbstractTask {
         }
         StringBuilder sb = new StringBuilder();
         tableInfos.forEach(ForEachUtil.withIndex((info, index) -> {
-            if (info.getColumnName().equals(invoker.getForeignKey())) {
-                return;
-            }
             String setter = String.format("public void set%s (%s %s) { this.%s = %s; } \n\n", StringUtil.firstToUpperCase(info.getPropertyName()),
                     info.getPropertyType(), info.getPropertyName(), info.getPropertyName(), info.getPropertyName());
             sb.append(index == 0 ? "" : Constant.SPACE_4).append(setter);
@@ -124,29 +99,6 @@ public class EntityTask extends AbstractTask {
             }
             sb.append(Constant.SPACE_4).append(getter);
         }));
-        // 生成父表实体类时，直接截断后续生成依赖关系的代码
-        if (Mode.ENTITY_PARENT.equals(mode)) {
-            return sb.toString();
-        }
-        if (!StringUtil.isEmpty(invoker.getRelationalTableName()) || !StringUtil.isEmpty(invoker.getParentForeignKey())) {
-            // 多对多
-            String setter = String.format("public void set%ss (List<%s> %ss) { this.%ss = %ss; }\n\n", invoker.getParentClassName(),
-                    invoker.getParentClassName(), StringUtil.firstToLowerCase(invoker.getParentClassName()),
-                    StringUtil.firstToLowerCase(invoker.getParentClassName()), StringUtil.firstToLowerCase(invoker.getParentClassName()));
-            sb.append(Constant.SPACE_4).append(setter);
-            String getter = String.format("public List<%s> get%ss () { return this.%ss; }\n\n", invoker.getParentClassName(),
-                    invoker.getParentClassName(), StringUtil.firstToLowerCase(invoker.getParentClassName()));
-            sb.append(Constant.SPACE_4).append(getter);
-        } else if (!StringUtil.isEmpty(invoker.getForeignKey())) {
-            // 多对一
-            String setter = String.format("public void set%s (%s %s) { this.%s = %s; }\n\n", invoker.getParentClassName(),
-                    invoker.getParentClassName(), StringUtil.firstToLowerCase(invoker.getParentClassName()),
-                    StringUtil.firstToLowerCase(invoker.getParentClassName()), StringUtil.firstToLowerCase(invoker.getParentClassName()));
-            sb.append(Constant.SPACE_4).append(setter);
-            String getter = String.format("public %s get%s () { return this.%s; }\n\n", invoker.getParentClassName(), invoker.getParentClassName(),
-                    StringUtil.firstToLowerCase(invoker.getParentClassName()));
-            sb.append(Constant.SPACE_4).append(getter);
-        }
         return sb.toString();
     }
 
@@ -179,35 +131,13 @@ public class EntityTask extends AbstractTask {
     }
 
     /**
-     * 为实体属性生成Orm框架（jpa/mybatis-plus）注解
+     * 为实体属性生成Orm框架tk.mybatis注解
      *
      * @param sb   StringBuilder对象
      * @param info 列属性
      */
     public void generateORMAnnotation(StringBuilder sb, ColumnInfo info) {
-        if (ConfigUtil.getConfiguration().isMybatisPlusEnable()) {
-            if (info.isPrimaryKey()) {
-                if (ConfigUtil.getConfiguration().getIdStrategy() == null || ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.AUTO) {
-                    sb.append(Constant.SPACE_4).append(String.format("@TableId(value = \"%s\", type = IdType.AUTO)\n", info.getColumnName()));
-                } else if (ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.UUID) {
-                    sb.append(Constant.SPACE_4).append(String.format("@TableId(value = \"%s\", type = IdType.ASSIGN_UUID)\n", info.getColumnName()));
-                }
-            } else {
-                sb.append(Constant.SPACE_4).append(String.format("@TableField(value = \"%s\")\n", info.getColumnName()));
-            }
-        } else if (ConfigUtil.getConfiguration().isJpaEnable()) {
-            if (info.isPrimaryKey()) {
-                if (ConfigUtil.getConfiguration().getIdStrategy() == null || ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.AUTO) {
-                    sb.append(Constant.SPACE_4).append("@Id\n");
-                    sb.append(Constant.SPACE_4).append("@GeneratedValue(strategy = GenerationType.IDENTITY)\n");
-                } else if (ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.UUID) {
-                    sb.append(Constant.SPACE_4).append("@Id\n");
-                    sb.append(Constant.SPACE_4).append("@GeneratedValue(generator = \"uuidGenerator\")\n");
-                    sb.append(Constant.SPACE_4).append("@GenericGenerator(name = \"uuidGenerator\", strategy = \"uuid\")\n");
-                }
-            }
-            sb.append(Constant.SPACE_4).append(String.format("@Column(name = \"%s\")\n", info.getColumnName()));
-        }else if (ConfigUtil.getConfiguration().isTkMapperEnable()){
+        if (ConfigUtil.getConfiguration().isTkMapperEnable()){
             if (info.isPrimaryKey()) {
                 if (ConfigUtil.getConfiguration().getIdStrategy() == null || ConfigUtil.getConfiguration().getIdStrategy() == IdStrategy.AUTO) {
                     sb.append(Constant.SPACE_4).append("@Id\n");

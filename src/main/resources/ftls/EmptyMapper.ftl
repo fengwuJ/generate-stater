@@ -4,8 +4,6 @@
 
     <resultMap id="${EntityName}ResultMap" type="${Configuration.packageName}.${Configuration.path.entity}.${ClassName}">
         ${ResultMap}
-        ${Association}
-        ${Collection}
     </resultMap>
 
 </mapper>

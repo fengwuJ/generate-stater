@@ -55,45 +55,6 @@ public class TaskQueue {
     }
 
     /**
-     * 初始化单表生成任务，包括Entity、Mapper任务
-     *
-     * @param invoker 执行器
-     */
-    public void initMany2OneTasks(AbstractInvoker invoker) {
-        initCommonTasks(invoker);
-        if (!StringUtil.isEmpty(ConfigUtil.getConfiguration().getPath().getEntity())) {
-            taskQueue.add(new EntityTask(Mode.ENTITY_MAIN, invoker));
-            taskQueue.add(new EntityTask(Mode.ENTITY_PARENT, invoker));
-        }
-    }
-
-    /**
-     * 初始化单表生成任务，包括Entity、Mapper任务
-     *
-     * @param invoker 执行器
-     */
-    public void initOne2ManyTasks(AbstractInvoker invoker) {
-        initCommonTasks(invoker);
-        if (!StringUtil.isEmpty(ConfigUtil.getConfiguration().getPath().getEntity())) {
-            taskQueue.add(new EntityTask(Mode.ENTITY_MAIN, invoker));
-            taskQueue.add(new EntityTask(Mode.ENTITY_PARENT, invoker));
-        }
-    }
-
-    /**
-     * 初始化单表生成任务，包括Entity、Mapper任务
-     *
-     * @param invoker 执行器
-     */
-    public void initMany2ManyTasks(AbstractInvoker invoker) {
-        initCommonTasks(invoker);
-        if (!StringUtil.isEmpty(ConfigUtil.getConfiguration().getPath().getEntity())) {
-            taskQueue.add(new EntityTask(Mode.ENTITY_MAIN, invoker));
-            taskQueue.add(new EntityTask(Mode.ENTITY_PARENT, invoker));
-        }
-    }
-
-    /**
      * 任务队列是否为空
      *
      * @return 是否为空

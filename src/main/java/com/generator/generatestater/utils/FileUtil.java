@@ -26,6 +26,9 @@ public class FileUtil {
             System.out.printf("Generating %s \n", path);
         }
         // 代码生成路径目录不存在则自动创建
+        if (file.exists()) {
+            file.delete();
+        }
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }

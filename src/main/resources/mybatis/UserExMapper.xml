@@ -3,12 +3,10 @@
 <mapper namespace="com.generator.generatestater.test.mapper.UserExMapper">
 
     <resultMap id="userExResultMap" type="com.generator.generatestater.test.entity.UserEx">
-        <result column="id" property="id" />
+        <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="en_name" property="enName" />
 
-        
-        
     </resultMap>
 
 </mapper>

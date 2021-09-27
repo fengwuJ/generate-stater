@@ -3,11 +3,10 @@ package ${Configuration.packageName}.${Configuration.path.entity};
 <#if Configuration.lombokEnable>
 import lombok.Data;
 </#if>
-<#if Configuration.mybatisPlusEnable>
-import com.baomidou.mybatisplus.annotation.*;
-<#elseif Configuration.jpaEnable>
-import javax.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
+<#if Configuration.tkMapperEnable>
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Id;
 </#if>
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -23,13 +22,10 @@ import java.util.List;
 <#if Configuration.lombokEnable>
 @Data
 </#if>
-<#if Configuration.mybatisPlusEnable>
-@TableName(value = "${TableName}")
-<#elseif Configuration.jpaEnable>
-@Entity
+<#if Configuration.tkMapperEnable>
 @Table(name = "${TableName}")
 </#if>
-public class ${ClassName} implements Serializable {
+public class ${ClassName} {
     ${Properties}
 
     ${Methods}

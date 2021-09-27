@@ -7,9 +7,5 @@ public enum Mode {
     /**
      * 主表模式
      */
-    ENTITY_MAIN,
-    /**
-     * 父表模式
-     */
-    ENTITY_PARENT;
+    ENTITY_MAIN;
 }

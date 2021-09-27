@@ -13,7 +13,8 @@ import java.util.List;
  * @author ${Configuration.author}
  * @date ${.now?date}
  */
-<#if Configuration.tkMapperEnable><#-- tkMapper -->
+<#if Configuration.tkMapperEnable>
+@Mapper
 public interface ${DaoClassName} extends ${CustomizeMapperClass}<${ClassName}> {
 
 }

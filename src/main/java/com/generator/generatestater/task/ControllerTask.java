@@ -68,7 +68,7 @@ public class ControllerTask extends AbstractTask {
      * @return
      */
     private String getPrimaryKeyType(List<ColumnInfo> columnInfos) {
-        if (!ConfigUtil.getConfiguration().isJpaEnable()) {
+        if (!ConfigUtil.getConfiguration().isTkMapperEnable()) {
             return "Serializable";
         }
         for (ColumnInfo info : columnInfos) {
