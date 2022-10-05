@@ -115,9 +115,4 @@ public class FileUtil {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(getResourcePath());
-        System.out.println(getSourcePath());
-    }
-
 }

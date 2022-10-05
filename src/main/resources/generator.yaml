@@ -1,20 +1,14 @@
-db:
-  url: jdbc:mysql://localhost:3306/generator-test
-  driverClass: com.mysql.cj.jdbc.Driver
-  username: root
-  password: root
 author: Apollo Jiang
-packageName: com.generator.generatestater.test
 convertor: com.generator.generatestater.convertor.CustomConvertor
 generateEmptyMapper: true
 tkMapper:
   baseMapper: com.generator.generatestater.common.CustomizeBaseMapper
 tkMapperEnable: true
-swaggerEnable: false      # 启用swagger
+swaggerEnable: true      # 启用swagger
 lombokEnable: true       # 启用lombok
 idStrategy: AUTO         # 主键生成策略  AUTO || UUID
 fileOverride: true       # 重名文件覆盖
-mapperUnderSource: false # false---(默认) MyBatis映射文件放于source目录下 || true--放置在rc源码中
+mapperUnderSource: false # false---(默认) MyBatis映射文件放于source目录下 || true--放置在src源码中
 path:
   controller: controller
   service: service.impl
@@ -25,6 +19,15 @@ path:
   req: dto.req
   res: dto.res
   search: dto.search
+
+db:
+  url: jdbc:mysql://localhost:3306/reg_server
+  driverClass: com.mysql.cj.jdbc.Driver
+  username: root
+  password: root
+
+# 要生成的包名
+packageName: com.regserver.register
 name: #自定义文件名及类名，$s为固定占位符
   controller: $sController
   service: $sServiceImpl
