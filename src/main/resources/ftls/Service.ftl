@@ -18,6 +18,7 @@ import java.util.List;
  * @author ${Configuration.author}
  * @date ${.now?date}
  */
+@Slf4j
 @Service
 public class ${ServiceClassName} ${Implements} {
     @Autowired

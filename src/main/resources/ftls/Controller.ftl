@@ -21,6 +21,7 @@ import java.util.List;
 <#if Configuration.swaggerEnable>
 @Api(value = "/${EntityName}", tags = "${ClassName}管理接口")
 </#if>
+@Slf4j
 @RestController
 @RequestMapping(value = "/${EntityName}")
 public class ${ControllerClassName} {
