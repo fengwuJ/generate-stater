@@ -1,8 +1,5 @@
 author: Apollo Jiang
-convertor: com.generator.generatestater.convertor.CustomConvertor
 generateEmptyMapper: true
-tkMapper:
-  baseMapper: com.generator.generatestater.common.CustomizeBaseMapper
 tkMapperEnable: true
 swaggerEnable: true      # 启用swagger
 lombokEnable: true       # 启用lombok
@@ -28,6 +25,10 @@ db:
 
 # 要生成的包名
 packageName: com.regserver.register
+# 需要用到的类
+convertor: com.regserver.register.convertor.CustomConvertor
+tkMapper:
+  baseMapper: com.regserver.register.common.CustomizeBaseMapper
 name: #自定义文件名及类名，$s为固定占位符
   controller: $sController
   service: $sServiceImpl
