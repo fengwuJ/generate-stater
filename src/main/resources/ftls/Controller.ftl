@@ -22,7 +22,7 @@ import java.util.List;
 @Api(value = "/${EntityName}", tags = "${ClassName}管理接口")
 </#if>
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/${EntityName}")
 public class ${ControllerClassName} {
     @Autowired
     private ${ServiceClassName} ${ServiceEntityName};
