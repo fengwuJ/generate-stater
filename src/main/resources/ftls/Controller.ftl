@@ -31,7 +31,7 @@ public class ${ControllerClassName} {
     @ApiOperation(value = "分页查询${ClassName}列表", httpMethod = "GET")
     </#if>
     @GetMapping(value = "/page")
-    public Object page(@RequestBody ${SearchClassName} search) {
+    public Object page(${SearchClassName} search) {
 
         Object result = ${ServiceEntityName}.page(search);
 
